@@ -5,9 +5,10 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
     if(req.isAuthenticated()){
-        res.render('index', { 
-            username : req.user.username,
-            title: 'Home Page',
+        res.render('indexFacebook', { 
+            nombre: req.user.displayName,
+            foto: req.user.photos[0].value,
+            email: req.user.emails[0].value,
         });
     }else{
         res.redirect('/login');    
@@ -18,7 +19,7 @@ router.get('/login', function(req, res, next) {
     if(req.isAuthenticated()){
         res.redirect("/");
     }else{
-        res.render('login', { title: 'Ingreso de usuarios', error: req.session.error });    
+        res.render('loginFacebook', { title: 'Ingreso de usuarios', error: req.session.error });    
     }
 });
 
@@ -27,8 +28,16 @@ router.get('/logout', function(req, res, next) {
     res.redirect("/");
 });
 
-router.post('/login', passport.authenticate('login', { failureRedirect: '/login' }), function(req, res, next) {
+router.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), function(req, res, next) {
     res.redirect('/');
+});
+
+router.get('/faillogin', function(req, res, next) {
+    if(req.isAuthenticated()){
+        res.redirect("/");
+    }else{
+        res.render('loginFacebook', { title: 'Ingreso de usuarios', error: 'Error de inicio de sesion' });    
+    }
 });
 
 router.get('/registrar', function(req, res, next) {

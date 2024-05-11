@@ -1,0 +1,13 @@
+
+<div class="container my-5">
+<div class="jumbotron">
+    <h1>Login de Usuario</h1>
+    <br>
+    {{#if error}}
+        <div class="alert alert-danger">{{error}}</div>
+    {{/if}}
+    <div class="form-group">
+        <input class="btn btn-primary my-3" type="submit" value="Login con Facebook" onclick="location.href = '/login/facebook'">
+    </div>
+</div>
+</div>

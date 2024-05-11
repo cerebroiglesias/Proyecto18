@@ -12,15 +12,18 @@ passport.use('login', new localStrategy({
             if (!user) {
                 console.log('User not found with username ' + username);
                 console.log('message', 'User not found');
+                req.session.error = 'User not found';
                 return done(null, false, 'User not found');
             }
             if (!isValidPassword(user, password)) {
                 console.log('Invalid Password');
                 console.log('message', 'Invalid Password');
+                req.session.error = 'Invalid Password';
                 return done(null, false, 'Invalid Password');
             }
             return done(null, user);
         }catch(err){
+            req.session.error = JSON.stringify(err);
             return done(err);
         }
     }
@@ -40,6 +43,7 @@ passport.use('register', new localStrategy({
                 if (user) {
                     console.log('User already exists with username: ' + username);
                     console.log('message', 'User already exists');
+                    req.session.error = 'User already exists';
                     return done(null, false, 'User already exists');
                 }
                 const newUser = new User();
@@ -52,6 +56,7 @@ passport.use('register', new localStrategy({
             }catch(err){
                 console.log('Error in Saving user: '+ err);
                 console.log('message', 'Error in Saving user');
+                req.session.error = JSON.stringify(err);
                 throw err;
             }
         }
